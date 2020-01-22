@@ -4,8 +4,23 @@
   <button (click)="onSetupBtnClick()">SetUp!</button>
   <button #tStop>Stop!</button>
   <label *ngIf="needsNumber">Needs number!</label>
+
   <div style="height: 10px;"></div>
-  <button (click)="onManualClick('LEFT')"><</button>
-  <img style="width: 500px; height: 360px;" src="{{imgSrc}}">
-  <button (click)="onManualClick('RIGHT')">></button>
+
+  <div style="position: relative;">
+    <div class="manualBtnCotainer left">
+      <button (click)="onManualClick('LEFT')"><</button>
+    </div>
+    <img style="width: 500px; height: 360px;" src="{{imgSrc}}">
+    <div class="manualBtnCotainer right">
+      <button (click)="onManualClick('RIGHT')">></button>
+    </div>
+    <div style="position: absolute; top: 340px; left: 200px">
+      <button *ngFor="let item of imgArray; let i = index"
+        style="height: 10px;"
+        [ngClass]="{'onSelect': i === this.imgIndex}"
+        (click)="onManualClick(i)">
+      </button>
+    </div>
+  </div>
 </div>

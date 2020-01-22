@@ -22,7 +22,6 @@ export class CarouselComponent implements OnInit {
   ];
 
   imgIndex = 0;
-  timerCount = 0;
 
   constructor() { }
 
@@ -42,12 +41,12 @@ export class CarouselComponent implements OnInit {
     this.subscription = timer(wait, Number.parseInt(period, 10))
       .pipe(takeUntil(fromEvent(stopBtn, 'click')))
       .subscribe(x => {
-        this.setImgSrc(this.timerCount += 1);
+        this.setImgSrc(this.imgIndex + 1);
       });
   }
 
   setImgSrc(num: number) {
-    this.imgIndex = num % this.imgArray.length;
+    this.imgIndex = num < 0 ? this.imgArray.length - 1 : num % this.imgArray.length;
     this.imgSrc = this.baseDir + this.imgArray[this.imgIndex];
   }
 
@@ -60,12 +59,15 @@ export class CarouselComponent implements OnInit {
     }
   }
 
-  onManualClick(direct: string) {
+  onManualClick(arg: string | number) {
     this.subscription.unsubscribe();
-    if (direct.toUpperCase() === 'LEFT') {
-      this.setImgSrc(this.timerCount -= 1);
-    } else {
-      this.setImgSrc(this.timerCount += 1);
+
+    if (typeof arg === 'string' && arg.toUpperCase() === 'LEFT') {
+      this.setImgSrc(this.imgIndex - 1);
+    } else if (typeof arg === 'string' && arg.toUpperCase() === 'RIGHT') {
+      this.setImgSrc(this.imgIndex + 1);
+    } else if (typeof arg === 'number') {
+      this.setImgSrc(arg);
     }
 
     this.setTimer(this.cusPeriod, Number.parseInt(this.cusPeriod, 10) * 0.8);
